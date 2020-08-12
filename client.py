@@ -355,19 +355,20 @@ class WebSocketClient:
         )
         extra = ( (n, v) for n, v in extra if n.lower() not in reserved )
         headers = ['GET ' + self.path + ' HTTP/1.1']
-        headers.extend('{}: {}'.format(n, v) for n, v in extra)
-        headers.append('Host: ' + self._host + ':' + str(self.addr[1]))
-        headers.append('Upgrade: WebSocket')
-        headers.append('Connection: Upgrade')
-        headers.append('Sec-WebSocket-Version: ' + str(self.version))
+        headers.extend(n + ': ' + v for n, v in extra)
+        key = base64.b64encode(os.urandom(16))
+        headers.extend((
+            'Host: ' + self._host + ':' + str(self.addr[1]),
+            'Upgrade: WebSocket',
+            'Connection: Upgrade',
+            'Sec-WebSocket-Version: ' + str(self.version),
+            'Sec-WebSocket-Key: ' + key.decode('ASCII')
+        ))
         if self.protocol is not None:
             headers.append('Sec-WebSocket-Protocol: ' + self.protocol)
-        key = base64.b64encode(os.urandom(16))
-        headers.append('Sec-WebSocket-Key: ' + key.decode('ASCII'))
         key = key + b'258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
         key = base64.b64encode(hashlib.sha1(key).digest()).decode('ASCII')
-        headers.append('')
-        headers.append('')
+        headers.extend(('', ''))
         self._sock.sendall('\r\n'.join(headers).encode('ASCII'))
         return key
 
