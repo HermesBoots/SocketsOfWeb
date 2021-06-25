@@ -1,5 +1,5 @@
-from arcwebsocket.common import FORBIDDEN_CLOSE_CODES
-from arcwebsocket.common import WebSocketError, WebSocketFrame
+from SocketsOfWeb.common import FORBIDDEN_CLOSE_CODES
+from SocketsOfWeb.common import WebSocketError, WebSocketFrame
 import base64
 import collections.abc
 import hashlib
