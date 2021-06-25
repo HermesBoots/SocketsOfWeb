@@ -52,7 +52,7 @@ class WebSocketFrame:
         ret = 'WebSocketFrame('
         if self.op > 0: ret += 'op: ' + str(self.op) + ', '
         ret += 'len: ' + str(self.size) + ', '
-        data = zip(self.data, range(8))
+        data = zip(self.payload, range(8))
         ret += ' '.join('{:02x}'.format(byte) for byte, _ in data)
         if self.size > 8: ret += '...'
         return ret
